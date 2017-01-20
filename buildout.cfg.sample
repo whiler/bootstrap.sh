@@ -1,0 +1,36 @@
+[buildout]
+update-versions-file = versions.cfg
+extends = versions.cfg
+versions = versions
+unzip = true
+newest = false
+relative-paths = true
+develop  = .
+index = https://pypi.doubanio.com/simple/
+include-site-packages = false
+extensions = buildout.eggscleaner
+old-eggs-directory = ${buildout:directory}/old-eggs/
+parts =
+		clean
+        module
+        unittest
+eggs = ipython
+
+[clean]
+recipe = plone.recipe.command
+command = find ${buildout:directory} -type f -iname "*.pyc" -delete
+
+
+[module]
+recipe = zc.recipe.egg
+interpreter = python
+eggs =
+dependent-scripts = true
+scripts =
+
+
+[unittest]
+recipe = pbp.recipe.noserunner
+eggs = ${module:eggs}
+defaults = -vd --with-xunit --with-coverage --cover-xml --cover-html
+working-directory = tests

@@ -1,0 +1,8 @@
+*.py[co]
+*.sw[op]
+.DS_Store
+.installed.cfg
+bin/
+develop-eggs/
+*.egg-info/
+eggs/
