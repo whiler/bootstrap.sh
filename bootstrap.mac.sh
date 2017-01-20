@@ -12,7 +12,7 @@ PYPI="https://pypi.douban.com/simple/"
 # https://www.iterm2.com/downloads.html
 
 # change shell
-sudo cash -s /bin/zsh
+sudo chsh -s /bin/zsh
 
 # install necessary tools
 sudo xcode-select --install
