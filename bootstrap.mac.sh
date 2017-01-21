@@ -1,6 +1,12 @@
 #!/bin/bash
 
 PYPI="https://pypi.douban.com/simple/"
+UNAME="$(uname -s)"
+if [[ "${UNAME}" == "Darwin" ]]; then
+	OSX=1
+else
+	OSX=0
+fi
 
 # install fonts
 # Inconsolata
@@ -14,8 +20,10 @@ PYPI="https://pypi.douban.com/simple/"
 # change shell
 sudo chsh -s /bin/zsh
 
-# install necessary tools
-sudo xcode-select --install
+if [[ ${OSX} -eq 1 ]]; then
+	# install necessary tools
+	sudo xcode-select --install
+fi
 
 # git config
 git config --global color.ui true
@@ -32,8 +40,8 @@ git config --global difftool.prompt false
 git config --global core.filemode false
 git config --global core.excludesfile '${HOME}/.gitignore'
 
-git config --global user.name "whiler"
-git config --global user.email "wenwu500@qq.com"
+#git config --global user.name "whiler"
+#git config --global user.email "wenwu500@qq.com"
 
 cp gitignore "${HOME}/.gitignore"
 
@@ -45,17 +53,24 @@ sed -i "" \
     -e 's/plugins=(git)/plugins=(git osx)/' \
     -e 's/# DISABLE_AUTO_UPDATE="true"/DISABLE_AUTO_UPDATE="true"/' "${HOME}/.zshrc"
 
-# install brew
-# https://github.com/Homebrew/homebrew
-/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-echo "export HOMEBREW_GITHUB_API_TOKEN=8ad8a3877aea831d8834325925ef6c9810446660" >> "${HOME}/.zshrc"
-brew doctor
+if [[ ${OSX} -eq 1 ]]; then
+	# install brew
+	# https://github.com/Homebrew/homebrew
+	/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+	echo "export HOMEBREW_GITHUB_API_TOKEN=8ad8a3877aea831d8834325925ef6c9810446660" >> "${HOME}/.zshrc"
+	brew doctor
+fi
 
 # install python packages
 # https://pip.readthedocs.io/en/stable/user_guide/#configuration
 sudo python get-pip.py -i "${PYPI}"
-mkdir -p $(dirname ${HOME}/Library/Application Support/pip/pip.conf) 
-cat << EOF > ${HOME}/Library/Application Support/pip/pip.conf
+if [[ ${OSX} -eq 1 ]]; then
+	PIP="${HOME}/Library/Application Support/pip/pip.conf"
+else
+	PIP="${HOME}/.config/pip/pip.conf"
+fi
+mkdir -p "$(dirname "${HOME}")" 
+cat << EOF > "${PIP}"
 [global]
 index-url = ${PYPI}
 EOF

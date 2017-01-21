@@ -1,143 +1,124 @@
-" VIMRC
-" last modified 2015Äê 8ÔÂ17ÈÕ ÐÇÆÚÒ» 21Ê±04·Ö15Ãë CST
-"
-
-" ²»¼æÈÝÄ£Ê½
+" 不兼容模式
 set nocompatible
 
-" ÔØÈëÎÄ¼þÀàÐÍ²å¼þ
+" 载入文件类型插件
 filetype plugin on
 
-" ²»×Ô¶¯»»ÐÐ
+" 不自动换行
 set nowrap
 
-" µ±ÎÄ¼þ´ÓÍâ²¿±»¸Ä¶¯Ê±×Ô¶¯ÔØÈë
+" 当文件从外部修改时，自动载入
 set autoread
 
-" ´øÓÐÈçÏÂ·ûºÅµÄµ¥´Ê²»Òª±»»»ÐÐ·Ö¸î
+" 不分割带有如下符号的单词
 set iskeyword+=_,$,@,%,#,- 
 
-" ²»±¸·ÝÎÄ¼þ
+" 不备份文件
 set nobackup
 
-" ×Ö·û¼ä²åÈëµÄÏñËØÐÐÊýÄ¿
+" 行间距
 set linespace=0
 
-" ÔÚ´¦ÀíÎ´±£´æ»òÖ»¶ÁÎÄ¼þµÄÊ±ºò£¬µ¯³öÈ·ÈÏ
+" 处理未保存或者只读文件时，要求确认
 set confirm
 
-" ²»Éè¶¨´ËÏîµÄ»°ÔÚ²åÈë×´Ì¬ÎÞ·¨ÓÃÍË¸ñ¼üºÍ Delete ¼üÉ¾³ý»Ø³µ·û
+" 在插入状态启用退格删除
 set backspace=indent,eol,start
 
-" Éè¶¨ÎÄ¼þä¯ÀÀÆ÷Ä¿Â¼Îªµ±Ç°Ä¿Â¼
+" 文件路径为当前路径
 set bsdir=buffer
 
-" ×Ô¶¯ÇÐ»»Ä¿Â¼
+" 自动切换目录
 set autochdir
 
-if has("autocmd")
-    " ¼Ç×¡ÉÏÒ»´Î´ò¿ªµÄÎ»ÖÃ
-    autocmd BufReadPost * if line(" '\" ") > 0 && line(" '\" ") <= line(" $") | exe " normal g'\" "  | endif
-endif
-
-" ²»·¢³öÌÖÑáµÄµÎµÎÉù
+" 不发出滴滴声
 set noerrorbells
 
-" ÓëÏµÍ³¹²Ïí¼ôÌù°å
+" 共享系统粘贴板
 set clipboard+=unnamed
 
-
-" --------------------------------------------------------------
-" ×Ô¶¯Ëõ½ø
+" 自动缩进
 set autoindent
+" 智能缩进
 set smartindent
-
-" CÓïÑÔÑùÊ½µÄËõ½ø
+" C 语言样式缩进
 set cindent
 
-" Ëõ½ø4¸ö¿Õ¸ñ
+" 缩进 4  个空格
 set tabstop=4
 set softtabstop=4
 set shiftwidth=4
 
-" ×Ô¶¯¸ñÊ½»¯
+" 自动格式化
 set formatoptions=tcrqn
 
-" Õì²âÎÄ¼þÀàÐÍ
+" 检测文件类型
 filetype on
 
-" ÎªÌØ¶¨ÎÄ¼þÀàÐÍÔØÈëÏà¹ØËõ½øÎÄ¼þ
-filetype indent on
-
-
-" --------------------------------------------------------------
-" Óï·¨¸ßÁÁ
+" 语法高亮
 syntax on
 
-" ¸ßÁÁËÑË÷
+" 高亮搜索关键字
 set hlsearch
 set incsearch
 
-" ¸ßÁÁÏÔÊ¾Æ¥ÅäµÄÀ¨ºÅ
+" 高亮匹配的括号
 set showmatch
 
-
-" --------------------------------------------------------------
-" ÓïÑÔÉèÖÃ
+" 语言
 set langmenu=zh_CN.UTF-8
 set helplang=cn
 
-" VIMÄÚ²¿±àÂë
+" VIM 内部编码
 set encoding=utf-8
 
-" VIMÔÚÓëÆÁÄ»/¼üÅÌ½»»¥Ê±Ê¹ÓÃµÄ±àÂë
+" 终端交互编码
 set termencoding=utf-8
 
-" VIMµ±Ç°±à¼­µÄÎÄ¼þÔÚ´æ´¢Ê±µÄ±àÂë
+" 文件保存时的编码
 set fileencoding=utf-8
 
-" VIM´ò¿ªÎÄ¼þÊ±µÄ³¢ÊÔÊ¹ÓÃµÄ±àÂë
+" 打开文件时尝试的编码
 set fileencodings=utf-8,ucs-bom,cp936,gb18030,big5,euc-kr,latin1
 
-" ¶Ô¡°²»Ã÷¿í¶È¡±×Ö·ûµÄ´¦Àí·½Ê½
+" 非 ASCII 字符的宽度
 set ambiwidth=double
 
-" Console ÏÔÊ¾ÖÐÎÄ
+" 显示中文
 language messages zh_CN.UTF-8
 
-
-" --------------------------------------------------------------
-" ¿ªÆôÕÛµþ
+" 开启折叠
 set foldenable
-" ÉèÖÃËõ½øÕÛµþ
+
+" 按标记折叠
 set foldmethod=marker
-" ÉèÖÃÕÛµþÇøÓòµÄ¿í¶È
+
+" 折叠宽度
 set foldcolumn=0
-" ÉèÖÃÕÛµþ²ãÊýÎª
+" 折叠层数
 setlocal foldlevel=0
 
-
-" --------------------------------------------------------------
 if has("autocmd")
+    " 记住上次打开的位置
+    autocmd BufReadPost * if line(" '\" ") > 0 && line(" '\" ") <= line(" $") | exe " normal g'\" "  | endif
 
-    " Ä£°åÎÄ¼þ
+    " 使用模版创建 python 文件
     autocmd BufNewFile *.py 0r $HOME/.vim/template/py.tpl
 
-    " Python Õ¹¿ªTab
+    " python 展开 tab
     autocmd FileType python set tabstop=4 expandtab shiftwidth=4 softtabstop=4
     autocmd FileType python set ruler
 
-    " F5µ÷ÊÔPython
+    " F5 调试脚本
     autocmd FileType python map <F5> :!python %<CR>
+    autocmd FileType lua map <F5> :!lua %<CR>
 endif
 
-
-" --------------------------------------------------------------
-" ÆôÓÃvim-pathogen²å¼þ
 if filereadable(expand("~/.vim/autoload/pathogen.vim"))
+    " pathogen VIM 插件管理
     execute pathogen#infect()
 
-" ÉèÖÃNERDTree
+    " NERDTree
     map <F3> :NERDTreeMirror<CR>
     map <F3> :NERDTreeToggle<CR>
 endif
