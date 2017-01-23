@@ -23,6 +23,8 @@ sudo chsh -s /bin/zsh
 if [[ ${OSX} -eq 1 ]]; then
 	# install necessary tools
 	sudo xcode-select --install
+else
+	sudo apt-get install build-essential git vim python python-pip 
 fi
 
 # git config
@@ -69,7 +71,7 @@ if [[ ${OSX} -eq 1 ]]; then
 else
 	PIP="${HOME}/.config/pip/pip.conf"
 fi
-mkdir -p "$(dirname "${HOME}")" 
+mkdir -p "$(dirname "${PIP}")" 
 cat << EOF > "${PIP}"
 [global]
 index-url = ${PYPI}
