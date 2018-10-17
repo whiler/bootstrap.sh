@@ -9,16 +9,20 @@ gitupdate() {
 	popd
 }
 
+brew update
 brew upgrade
+brew cleanup -s
+brew doctor
+brew missing
 
 (pip3 freeze | cut -d= -f1 > /tmp/r.txt && \
  echo "wheel" >> /tmp/r.txt && \
  echo "pip" >> /tmp/r.txt && \
  echo "setuptools" >> /tmp/r.txt && \
- sed -i '' -e 's/prompt-toolkit/prompt-toolkit<2.0.0,>=1.0.15/' /tmp/r.txt && \
+ sed -i '' -e 's/prompt-toolkit/prompt-toolkit<2.1.0,>=2.0.0/' /tmp/r.txt && \
  pip3 install -U -r /tmp/r.txt && \
  rm /tmp/r.txt)&
- 
+
 if [[ -e "${HOME}/.oh-my-zsh" ]]; then
 	gitupdate "${HOME}/.oh-my-zsh" &
 fi
