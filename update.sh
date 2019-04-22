@@ -1,12 +1,12 @@
 #!/bin/bash
 
 gitupdate() {
-	pushd "$1"
-		if [[ ! -z "$(git remote)" ]]; then
-			git checkout master
-			git pull origin master
-		fi
-	popd
+    pushd "$1"
+        if [[ ! -z "$(git remote)" ]]; then
+            git checkout master
+            git pull origin master
+        fi
+    popd
 }
 
 brew update
@@ -24,14 +24,14 @@ brew missing
  rm /tmp/r.txt)&
 
 if [[ -e "${HOME}/.oh-my-zsh" ]]; then
-	gitupdate "${HOME}/.oh-my-zsh" &
+    gitupdate "${HOME}/.oh-my-zsh" &
 fi
 
 if [[ -e "${HOME}/.vim/bundle" ]]; then
-	for plugin in $(ls "${HOME}/.vim/bundle");
-	do
-		gitupdate "${HOME}/.vim/bundle/${plugin}" &
-	done
+    for plugin in $(ls "${HOME}/.vim/bundle");
+    do
+        gitupdate "${HOME}/.vim/bundle/${plugin}" &
+    done
 fi
 
 wait

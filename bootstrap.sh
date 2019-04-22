@@ -3,15 +3,15 @@
 OSX=0
 PYPI="https://pypi.douban.com/simple/"
 if [[ "$(uname -s)" == "Darwin" ]]; then
-	OSX=1
+    OSX=1
 fi
 
 sedi() {
-	if [[ ${OSX} -eq 1 ]]; then
-		sed -i "" "${@}"
-	else
-		sed -i "${@}"
-	fi
+    if [[ ${OSX} -eq 1 ]]; then
+        sed -i "" "${@}"
+    else
+        sed -i "${@}"
+    fi
 }
 
 # install fonts
@@ -28,10 +28,10 @@ echo "change shell to zsh"
 chsh -s /bin/zsh
 
 if [[ ${OSX} -eq 1 ]]; then
-	# install necessary tools
-	sudo xcode-select --install
+    # install necessary tools
+    sudo xcode-select --install
 else
-	sudo apt-get install build-essential git vim python python-pip 
+    sudo apt-get install build-essential git vim python python-pip 
 fi
 
 # git config
@@ -64,20 +64,20 @@ EOF
 # https://github.com/robbyrussell/oh-my-zsh
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 sedi -e 's/ZSH_THEME="robbyrussell"/ZSH_THEME="gentoo"/' \
-	 -e 's/# DISABLE_AUTO_UPDATE="true"/DISABLE_AUTO_UPDATE="true"/' "${HOME}/.zshrc"
+     -e 's/# DISABLE_AUTO_UPDATE="true"/DISABLE_AUTO_UPDATE="true"/' "${HOME}/.zshrc"
 
 if [[ ${OSX} -eq 1 ]]; then
-	# install brew
-	# https://brew.sh/
-	/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-	brew doctor
-	brew install python vim
+    # install brew
+    # https://brew.sh/
+    /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+    brew doctor
+    brew install python vim
 fi
 
 if [[ ${OSX} -eq 1 ]]; then
-	PIP="${HOME}/Library/Application Support/pip/pip.conf"
+    PIP="${HOME}/Library/Application Support/pip/pip.conf"
 else
-	PIP="${HOME}/.config/pip/pip.conf"
+    PIP="${HOME}/.config/pip/pip.conf"
 fi
 mkdir -p "$(dirname "${PIP}")" 
 cat << EOF > "${PIP}"
@@ -234,8 +234,8 @@ endif
 EOF
 mkdir -p ~/.vim/autoload ~/.vim/bundle && curl -LSso ~/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim
 pushd "${HOME}/.vim/bundle"
-	git clone https://github.com/nvie/vim-flake8.git
-	git clone https://github.com/scrooloose/nerdtree.git
+    git clone https://github.com/nvie/vim-flake8.git
+    git clone https://github.com/scrooloose/nerdtree.git
     git clone https://github.com/fatih/vim-go.git
 popd
 mkdir -p "${HOME}/.vim/template"
@@ -257,13 +257,9 @@ EOF
 mkdir -p "${HOME}/.ssh"
 cat << EOF > "${HOME}/.ssh/config"
 HashKnownHosts yes
-
 HostKeyAlgorithms ssh-ed25519-cert-v01@openssh.com,ssh-rsa-cert-v01@openssh.com,ssh-ed25519,ssh-rsa,ecdsa-sha2-nistp521-cert-v01@openssh.com,ecdsa-sha2-nistp384-cert-v01@openssh.com,ecdsa-sha2-nistp256-cert-v01@openssh.com,ecdsa-sha2-nistp521,ecdsa-sha2-nistp384,ecdsa-sha2-nistp256
-
 KexAlgorithms curve25519-sha256@libssh.org,ecdh-sha2-nistp521,ecdh-sha2-nistp384,ecdh-sha2-nistp256,diffie-hellman-group-exchange-sha256
-
 MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,umac-128-etm@openssh.com,hmac-sha2-512,hmac-sha2-256,umac-128@openssh.com
-
 Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr
 
 EOF
