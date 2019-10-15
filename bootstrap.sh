@@ -92,7 +92,7 @@ EOF
 curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
 sudo python get-pip.py -i "${PYPI}"
 
-pip install flake8 virtualenvwrapper six --ignore-installed
+pip3 install flake8 virtualenvwrapper six --ignore-installed
 cat << EOF >> "${HOME}/.zshrc"
 
 # https://virtualenvwrapper.readthedocs.io/en/latest/
