@@ -25,8 +25,8 @@ echo access https://www.iterm2.com/downloads.html to install iTerm2
 
 # change shell
 if [[ "${SHELL}" != "/bin/zsh" ]]; then
-	echo "change shell to zsh"
-	chsh -s /bin/zsh
+    echo "change shell to zsh"
+    chsh -s /bin/zsh
 fi
 
 if [[ ${OSX} -eq 1 ]]; then
@@ -263,5 +263,15 @@ HostKeyAlgorithms ssh-ed25519-cert-v01@openssh.com,ssh-rsa-cert-v01@openssh.com,
 KexAlgorithms curve25519-sha256@libssh.org,ecdh-sha2-nistp521,ecdh-sha2-nistp384,ecdh-sha2-nistp256,diffie-hellman-group-exchange-sha256
 MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,umac-128-etm@openssh.com,hmac-sha2-512,hmac-sha2-256,umac-128@openssh.com
 Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr
+
+ServerAliveInterval 120
+
+host localhost
+    HostName 127.0.0.1
+    Port 22
+    User ${USER}
+    StrictHostKeyChecking no
+    UserKnownHostsFile /dev/null
+    IdentityFile ${HOME}/.ssh/id_rsa
 
 EOF
