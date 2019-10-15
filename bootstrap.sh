@@ -18,7 +18,7 @@ sedi() {
 # Inconsolata
 echo access http://levien.com/type/myfonts/inconsolata.html to install Inconsolata
 # DejaVu Sans Mono
-echo access http://dejavu-fonts.org/wiki/Download to install DejaVu Sans Mono
+echo access https://dejavu-fonts.github.io/Download.html to install DejaVu Sans Mono
 
 # install iTerm2
 echo access https://www.iterm2.com/downloads.html to install iTerm2
