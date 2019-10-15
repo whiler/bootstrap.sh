@@ -24,8 +24,10 @@ echo access http://dejavu-fonts.org/wiki/Download to install DejaVu Sans Mono
 echo access https://www.iterm2.com/downloads.html to install iTerm2
 
 # change shell
-echo "change shell to zsh"
-chsh -s /bin/zsh
+if [[ "${SHELL}" != "/bin/zsh" ]]; then
+	echo "change shell to zsh"
+	chsh -s /bin/zsh
+fi
 
 if [[ ${OSX} -eq 1 ]]; then
     # install necessary tools
