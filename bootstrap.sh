@@ -73,7 +73,7 @@ if [[ ${OSX} -eq 1 ]]; then
     # https://brew.sh/
     /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
     brew doctor
-    brew install python vim
+    brew install python vim direnv
 fi
 
 if [[ ${OSX} -eq 1 ]]; then
