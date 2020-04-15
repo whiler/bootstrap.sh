@@ -221,7 +221,7 @@ if has("autocmd")
     autocmd FileType python set ruler
 
     " F5 调试脚本
-    autocmd FileType python map <F5> :!python %<CR>
+    autocmd FileType python map <F5> :!python3 %<CR>
     autocmd FileType lua map <F5> :!lua %<CR>
 endif
 
