@@ -1,19 +1,5 @@
 #!/bin/bash
 
-OSX=0
-PYPI="https://pypi.douban.com/simple/"
-if [[ "$(uname -s)" == "Darwin" ]]; then
-    OSX=1
-fi
-
-sedi() {
-    if [[ ${OSX} -eq 1 ]]; then
-        sed -i "" "${@}"
-    else
-        sed -i "${@}"
-    fi
-}
-
 # install fonts
 # Inconsolata
 echo access http://levien.com/type/myfonts/inconsolata.html to install Inconsolata
@@ -23,18 +9,8 @@ echo access https://dejavu-fonts.github.io/Download.html to install DejaVu Sans 
 # install iTerm2
 echo access https://www.iterm2.com/downloads.html to install iTerm2
 
-# change shell
-if [[ "${SHELL}" != "/bin/zsh" ]]; then
-    echo "change shell to zsh"
-    chsh -s /bin/zsh
-fi
-
-if [[ ${OSX} -eq 1 ]]; then
-    # install necessary tools
-    sudo xcode-select --install
-else
-    sudo apt-get install build-essential git vim python python-pip 
-fi
+# install necessary tools
+sudo xcode-select --install
 
 # git config
 git config --global color.ui true
@@ -43,7 +19,7 @@ git config --global alias.br branch
 git config --global alias.ci commit
 git config --global alias.di difftool
 git config --global alias.st status 
-git config --global alias.last 'log -1 HEAD'
+git config --global alias.last "log -1 HEAD"
 git config --global push.default simple
 git config --global diff.tool vimdiff
 git config --global merge.tool vimdiff
@@ -62,25 +38,47 @@ develop-eggs/
 eggs/
 EOF
 
+# install brew
+# Ref. https://brew.sh/
+if [[ ! -e /usr/local/bin/brew ]]; then
+	/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+fi
+brew doctor
+# install necessary packages
+brew install python vim direnv zsh
+
+# switch to zsh
+if [[ 0 -eq $(grep -c "$(which zsh)" /etc/shells) ]]; then
+	sudo sed -i "" -e '/zsh/a\'$'\n'$(which zsh) /etc/shells
+	chsh -s $(which zsh)
+fi
+
 # install oh-my-zsh
-# https://github.com/robbyrussell/oh-my-zsh
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
-sedi -e 's/ZSH_THEME="robbyrussell"/ZSH_THEME="gentoo"/' \
+# Ref. https://github.com/robbyrussell/oh-my-zsh
+if [[ ! -e "${HOME}/.oh-my-zsh" ]]; then
+	sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+fi
+
+if [[ 0 -eq $(grep -c "PYTHONDONTWRITEBYTECODE=x" "${HOME}/.zshrc") ]]; then
+	cat >> "${HOME}/.zshrc" << EOF
+# don't write .py[co] files on import
+export PYTHONDONTWRITEBYTECODE=x
+EOF
+fi
+
+if [[ 0 -eq $(grep -c "direnv hook zsh" "${HOME}/.zshrc") ]]; then
+	cat >> "${HOME}/.zshrc" << EOF
+# hook zsh 
+# Ref. https://direnv.net/docs/hook.html
+eval "\$(direnv hook zsh)"
+EOF
+fi
+
+sed -i "" -e 's/ZSH_THEME="robbyrussell"/ZSH_THEME="gentoo"/' \
      -e 's/# DISABLE_AUTO_UPDATE="true"/DISABLE_AUTO_UPDATE="true"/' "${HOME}/.zshrc"
 
-if [[ ${OSX} -eq 1 ]]; then
-    # install brew
-    # https://brew.sh/
-    /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-    brew doctor
-    brew install python vim direnv zsh
-fi
-
-if [[ ${OSX} -eq 1 ]]; then
-    PIP="${HOME}/Library/Application Support/pip/pip.conf"
-else
-    PIP="${HOME}/.config/pip/pip.conf"
-fi
+PYPI="https://pypi.douban.com/simple/"
+PIP="${HOME}/Library/Application Support/pip/pip.conf"
 mkdir -p "$(dirname "${PIP}")" 
 cat << EOF > "${PIP}"
 [global]
@@ -92,13 +90,7 @@ EOF
 curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
 sudo python get-pip.py -i "${PYPI}"
 
-pip3 install flake8 virtualenvwrapper six --ignore-installed
-cat << EOF >> "${HOME}/.zshrc"
-
-# https://virtualenvwrapper.readthedocs.io/en/latest/
-export WORKON_HOME="\${HOME}/.venv"
-source /usr/local/bin/virtualenvwrapper.sh
-EOF
+pip3 install flake8 virtualenv --ignore-installed
 
 # https://flake8.readthedocs.io/en/2.0/config.html
 mkdir -p $(dirname "${HOME}/.config/flake8")
@@ -214,7 +206,7 @@ if has("autocmd")
     autocmd BufReadPost * if line(" '\" ") > 0 && line(" '\" ") <= line(" $") | exe " normal g'\" "  | endif
 
     " 使用模版创建 python 文件
-    autocmd BufNewFile *.py 0r $HOME/.vim/template/py.tpl
+    autocmd BufNewFile *.py 0r ${HOME}/.vim/template/py.tpl
 
     " python 展开 tab
     autocmd FileType python set tabstop=4 expandtab shiftwidth=4 softtabstop=4
@@ -234,12 +226,14 @@ if filereadable(expand("~/.vim/autoload/pathogen.vim"))
     map <F3> :NERDTreeToggle<CR>
 endif
 EOF
-mkdir -p ~/.vim/autoload ~/.vim/bundle && curl -LSso ~/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim
+
+mkdir -p ${HOME}/.vim/autoload ${HOME}/.vim/bundle && curl -LSso ${HOME}/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim
 pushd "${HOME}/.vim/bundle"
     git clone https://github.com/nvie/vim-flake8.git
     git clone https://github.com/scrooloose/nerdtree.git
     git clone https://github.com/fatih/vim-go.git
 popd
+
 mkdir -p "${HOME}/.vim/template"
 cat << EOF > "${HOME}/.vim/template/py.tpl"
 #!/usr/bin/env python
@@ -256,7 +250,7 @@ logger = logging.getLogger(__name__)
 
 EOF
 
-# SSH
+# SSH client
 mkdir -p "${HOME}/.ssh"
 cat << EOF > "${HOME}/.ssh/config"
 # Ref. https://infosec.mozilla.org/guidelines/openssh#modern
