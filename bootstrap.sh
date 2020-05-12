@@ -42,6 +42,13 @@ EOF
 # Ref. https://brew.sh/
 if [[ ! -e /usr/local/bin/brew ]]; then
 	/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+
+	# https://mirrors.tuna.tsinghua.edu.cn/help/homebrew/
+	git -C "$(brew --repo)" remote set-url origin https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git
+	git -C "$(brew --repo homebrew/core)" remote set-url origin https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-core.git
+	git -C "$(brew --repo homebrew/cask)" remote set-url origin https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-cask.git
+	git -C "$(brew --repo homebrew/cask-fonts)" remote set-url origin https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-cask-fonts.git
+	git -C "$(brew --repo homebrew/cask-drivers)" remote set-url origin https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-cask-drivers.git
 fi
 brew doctor
 # install necessary packages
@@ -71,6 +78,13 @@ if [[ 0 -eq $(grep -c "direnv hook zsh" "${HOME}/.zshrc") ]]; then
 # hook zsh 
 # Ref. https://direnv.net/docs/hook.html
 eval "\$(direnv hook zsh)"
+EOF
+fi
+
+if [[ 0 -eq $(grep -c HOMEBREW_BOTTLE_DOMAIN "${HOME}/.zshrc") ]]; then
+	cat >> "${HOME}/.zshrc" << EOF
+# https://mirrors.tuna.tsinghua.edu.cn/help/homebrew-bottles/
+export HOMEBREW_BOTTLE_DOMAIN=https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles
 EOF
 fi
 
