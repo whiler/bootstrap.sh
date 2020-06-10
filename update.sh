@@ -15,7 +15,7 @@ brew cleanup -s
 brew doctor
 brew missing
 
-(pipdeptree | grep -o -E '^\w+' > /tmp/r.txt && \
+(pipdeptree | grep -o -E '^\w[^=]+' > /tmp/r.txt && \
  echo "wheel" >> /tmp/r.txt && \
  echo "pip" >> /tmp/r.txt && \
  echo "setuptools" >> /tmp/r.txt && \
