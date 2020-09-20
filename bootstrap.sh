@@ -265,7 +265,7 @@ logger = logging.getLogger(__name__)
 EOF
 
 # SSH client
-mkdir -p "${HOME}/.ssh"
+mkdir -p "${HOME}/.ssh/sockets"
 cat << EOF > "${HOME}/.ssh/config"
 # Ref. https://infosec.mozilla.org/guidelines/openssh#modern
 
@@ -277,7 +277,12 @@ Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.
 
 ServerAliveInterval 120
 
-host localhost
+Host *
+    ControlMaster auto
+    ControlPath ${HOME}/.ssh/sockets/%r@%h-%p
+    ControlPersist 300
+
+Host localhost
     HostName 127.0.0.1
     Port 22
     User ${USER}
