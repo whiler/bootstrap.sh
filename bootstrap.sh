@@ -18,7 +18,7 @@ git config --global alias.co checkout
 git config --global alias.br branch
 git config --global alias.ci commit
 git config --global alias.di difftool
-git config --global alias.st status 
+git config --global alias.st "status --short --branch"
 git config --global alias.last "log -1 HEAD"
 git config --global push.default simple
 git config --global diff.tool vimdiff
@@ -52,7 +52,7 @@ if [[ ! -e /usr/local/bin/brew ]]; then
 fi
 brew doctor
 # install necessary packages
-brew install python vim direnv zsh
+brew install direnv gnupg git-crypt python socat upx vim wget zsh
 
 # switch to zsh
 if [[ 0 -eq $(grep -c "$(which zsh)" /etc/shells) ]]; then
