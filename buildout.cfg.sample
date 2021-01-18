@@ -11,7 +11,7 @@ include-site-packages = false
 extensions = buildout.eggscleaner
 old-eggs-directory = ${buildout:directory}/old-eggs/
 parts =
-		clean
+        clean
         module
         unittest
 eggs = ipython
