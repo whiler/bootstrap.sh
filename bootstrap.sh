@@ -51,8 +51,21 @@ if [[ ! -e /usr/local/bin/brew ]]; then
 	git -C "$(brew --repo homebrew/cask-drivers)" remote set-url origin https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-cask-drivers.git
 fi
 brew doctor
+addpath=/usr/local/sbin
 # install necessary packages
-brew install direnv gnupg git-crypt python socat upx vim wget zsh
+pkgs="direnv git-crypt gnupg upx wget"
+if ! which python3; then
+	pkgs="${pkgs} python"
+else
+	addpath="${addpath}:/Users/${USER}/Library/Python/$(python3 -V|grep -o '3.[0-9]')/bin"
+fi
+if ! which zsh; then
+	pkgs="${pkgs} zsh"
+fi
+if [[ 1 -eq $(echo "$(vim --version|grep IMproved|grep -o '8.[0-9]') < 8.2" | bc) ]]; then
+	pkgs="${pkgs} vim"
+fi
+brew install ${pkgs}
 
 # switch to zsh
 if [[ 0 -eq $(grep -c "$(which zsh)" /etc/shells) ]]; then
@@ -91,6 +104,13 @@ fi
 sed -i "" -e 's/ZSH_THEME="robbyrussell"/ZSH_THEME="gentoo"/' \
      -e 's/# DISABLE_AUTO_UPDATE="true"/DISABLE_AUTO_UPDATE="true"/' "${HOME}/.zshrc"
 
+if [[ 0 -eq $(grep -c -E "^export PATH=" "${HOME}/.zshrc") ]]; then
+	cat >> "${HOME}/.zshrc" << EOF
+# additional PATH
+export PATH=\${PATH}:${addpath}
+EOF
+fi
+
 PYPI="https://pypi.douban.com/simple/"
 PIP="${HOME}/Library/Application Support/pip/pip.conf"
 mkdir -p "$(dirname "${PIP}")" 
@@ -101,10 +121,12 @@ EOF
 
 # install python packages
 # https://pip.readthedocs.io/en/stable/user_guide/#configuration
-curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
-sudo python get-pip.py -i "${PYPI}"
+if ! which pip3; then
+	curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+	sudo python get-pip.py -i "${PYPI}"
+fi
 
-pip3 install flake8 virtualenv --ignore-installed
+pip3 install --user --ignore-installed flake8 virtualenv
 
 # https://flake8.readthedocs.io/en/2.0/config.html
 mkdir -p $(dirname "${HOME}/.config/flake8")
@@ -280,7 +302,7 @@ ServerAliveInterval 120
 Host *
     ControlMaster auto
     ControlPath ${HOME}/.ssh/sockets/%r@%h-%p
-    ControlPersist 300
+    ControlPersist 180
 
 Host localhost
     HostName 127.0.0.1
@@ -288,6 +310,6 @@ Host localhost
     User ${USER}
     StrictHostKeyChecking no
     UserKnownHostsFile /dev/null
-    IdentityFile ${HOME}/.ssh/id_rsa
+    IdentityFile ${HOME}/.ssh/id_ed25519
 
 EOF
