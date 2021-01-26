@@ -25,6 +25,6 @@ arm64:
 	EXT=.aarch64 GOARCH=arm64 $(MAKE) linux
 
 init:
-	go mod init
+	go mod init $(shell hostname -f)/$(USER)/$(APP)
 
 all: amd64 arm64
