@@ -13,19 +13,20 @@ echo access https://www.iterm2.com/downloads.html to install iTerm2
 sudo xcode-select --install
 
 # git config
-git config --global color.ui true
-git config --global alias.co checkout
 git config --global alias.br branch
 git config --global alias.ci commit
+git config --global alias.co checkout
 git config --global alias.di difftool
-git config --global alias.st "status --short --branch"
 git config --global alias.last "log -1 HEAD"
-git config --global push.default simple
-git config --global diff.tool vimdiff
-git config --global merge.tool vimdiff
-git config --global difftool.prompt false
-git config --global core.filemode false
+git config --global alias.st "status --short --branch"
+git config --global color.ui true
 git config --global core.excludesfile "${HOME}/.gitignore"
+git config --global core.filemode false
+git config --global diff.tool vimdiff
+git config --global difftool.prompt false
+git config --global merge.tool vimdiff
+git config --global pull.rebase false
+git config --global push.default simple
 
 cat > "${HOME}/.gitignore" << EOF
 *.py[co]
