@@ -12,6 +12,7 @@ gitupdate() {
 brew update
 brew upgrade
 brew cleanup -s
+brew autoremove
 brew doctor
 brew missing
 
