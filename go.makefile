@@ -3,7 +3,7 @@ REV := $(shell git rev-parse --short HEAD)
 APP := $(shell basename $(CURDIR))
 ARTIFACT := bin/$(APP)$(EXT)
 
-GOFLAGS ?= -race
+GOFLAGS ?= -race -v
 GOLDFLAGS ?= -X main.buildRevision=$(REV)@$(DT)
 
 .PHONY: all amd64 arm64 build init linux release
@@ -23,6 +23,12 @@ amd64:
 
 arm64:
 	EXT=.aarch64 GOARCH=arm64 $(MAKE) linux
+
+armv7:
+	EXT=.armv7l GOARCH=arm GOARM=7 $(MAKE) linux
+
+armv6:
+	EXT=.armv6 GOARCH=arm GOARM=6 $(MAKE) linux
 
 init:
 	go mod init $(shell hostname -f)/$(USER)/$(APP)
