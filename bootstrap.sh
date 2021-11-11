@@ -27,6 +27,7 @@ git config --global difftool.prompt false
 git config --global merge.tool vimdiff
 git config --global pull.rebase false
 git config --global push.default simple
+git config --global url."git@bitbucket.org:".insteadOf "https://bitbucket.org/"
 
 cat > "${HOME}/.gitignore" << EOF
 *.py[co]
@@ -42,14 +43,7 @@ EOF
 # install brew
 # Ref. https://brew.sh/
 if [[ ! -e /usr/local/bin/brew ]]; then
-	/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-
-	# https://mirrors.tuna.tsinghua.edu.cn/help/homebrew/
-	git -C "$(brew --repo)" remote set-url origin https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git
-	git -C "$(brew --repo homebrew/core)" remote set-url origin https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-core.git
-	git -C "$(brew --repo homebrew/cask)" remote set-url origin https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-cask.git
-	git -C "$(brew --repo homebrew/cask-fonts)" remote set-url origin https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-cask-fonts.git
-	git -C "$(brew --repo homebrew/cask-drivers)" remote set-url origin https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-cask-drivers.git
+	/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 fi
 brew doctor
 addpath=/usr/local/sbin
@@ -124,16 +118,195 @@ EOF
 # https://pip.readthedocs.io/en/stable/user_guide/#configuration
 if ! which pip3; then
 	curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
-	sudo python get-pip.py -i "${PYPI}"
+	sudo python3 get-pip.py -i "${PYPI}"
 fi
 
-pip3 install --user --ignore-installed flake8 virtualenv
+pip3 install ipython pipdeptree pylint virtualenv
+cat << EOF > "${HOME}/.pylintrc"
+[MASTER]
+extension-pkg-allow-list=
+extension-pkg-whitelist=
+fail-on=
+fail-under=10.0
+ignore=CVS
+ignore-paths=
+ignore-patterns=
+jobs=1
+limit-inference-results=100
+load-plugins=
+persistent=yes
+py-version=3.8
+suggestion-mode=yes
+unsafe-load-any-extension=no
 
-# https://flake8.readthedocs.io/en/2.0/config.html
-mkdir -p $(dirname "${HOME}/.config/flake8")
-cat << EOF > "${HOME}/.config/flake8"
-[flake8]
-max-line-length = 160
+[MESSAGES CONTROL]
+confidence=
+disable=invalid-name,
+        missing-module-docstring,
+        missing-class-docstring,
+        missing-function-docstring,
+        no-member,
+        raw-checker-failed,
+        bad-inline-option,
+        locally-disabled,
+        file-ignored,
+        suppressed-message,
+        useless-suppression,
+        deprecated-pragma,
+        use-symbolic-message-instead,
+        useless-object-inheritance,
+        too-many-instance-attributes,
+        too-many-arguments,
+        too-many-locals
+enable=c-extension-no-member
+
+[REPORTS]
+evaluation=10.0 - ((float(5 * error + warning + refactor + convention) / statement) * 10)
+output-format=text
+reports=no
+score=yes
+
+[REFACTORING]
+max-nested-blocks=5
+never-returning-functions=sys.exit,argparse.parse_error
+
+[LOGGING]
+logging-format-style=old
+logging-modules=logging
+
+[SPELLING]
+max-spelling-suggestions=4
+spelling-dict=
+spelling-ignore-comment-directives=fmt: on,fmt: off,noqa:,noqa,nosec,isort:skip,mypy:
+spelling-ignore-words=
+spelling-private-dict-file=
+spelling-store-unknown-words=no
+
+[MISCELLANEOUS]
+notes=FIXME,
+      XXX,
+      TODO
+
+[TYPECHECK]
+contextmanager-decorators=contextlib.contextmanager
+generated-members=
+ignore-mixin-members=yes
+ignore-none=yes
+ignore-on-opaque-inference=yes
+ignored-classes=optparse.Values,thread._local,_thread._local
+ignored-modules=
+missing-member-hint=yes
+missing-member-hint-distance=1
+missing-member-max-choices=1
+signature-mutators=
+
+[VARIABLES]
+additional-builtins=
+allow-global-unused-variables=yes
+allowed-redefined-builtins=
+callbacks=cb_,
+          _cb
+dummy-variables-rgx=_+$|(_
+[a-zA-Z0-9_]*[a-zA-Z0-9]+?$)|dummy|^ignored_|^unused_
+ignored-argument-names=_.*|^ignored_|^unused_
+init-import=no
+redefining-builtins-modules=six.moves,past.builtins,future.builtins,builtins,io
+
+[FORMAT]
+expected-line-ending-format=
+indent-after-paren=4
+indent-string='    '
+max-line-length=120
+max-module-lines=1000
+single-line-class-stmt=no
+single-line-if-stmt=no
+
+[SIMILARITIES]
+ignore-comments=yes
+ignore-docstrings=yes
+ignore-imports=no
+ignore-signatures=no
+min-similarity-lines=4
+
+[BASIC]
+argument-naming-style=snake_case
+attr-naming-style=snake_case
+bad-names=foo,
+          bar,
+          baz,
+          toto,
+          tutu,
+          tata
+bad-names-rgxs=
+class-attribute-naming-style=any
+class-const-naming-style=UPPER_CASE
+class-naming-style=PascalCase
+const-naming-style=UPPER_CASE
+docstring-min-length=-1
+function-naming-style=snake_case
+good-names=i,
+           j,
+           k,
+           ex,
+           Run,
+           _
+good-names-rgxs=
+include-naming-hint=no
+inlinevar-naming-style=any
+method-naming-style=snake_case
+module-naming-style=snake_case
+name-group=
+no-docstring-rgx=^_
+property-classes=abc.abstractproperty
+variable-naming-style=snake_case
+
+[STRING]
+check-quote-consistency=no
+check-str-concat-over-line-jumps=no
+
+[IMPORTS]
+allow-any-import-level=
+allow-wildcard-with-all=no
+analyse-fallback-blocks=no
+deprecated-modules=
+ext-import-graph=
+import-graph=
+int-import-graph=
+known-standard-library=
+known-third-party=enchant
+preferred-modules=
+
+[CLASSES]
+check-protected-access-in-special-methods=no
+defining-attr-methods=__init__,
+                      __new__,
+                      setUp,
+                      __post_init__
+exclude-protected=_asdict,
+                  _fields,
+                  _replace,
+                  _source,
+                  _make
+valid-classmethod-first-arg=cls
+valid-metaclass-classmethod-first-arg=cls
+
+[DESIGN]
+ignored-parents=
+max-args=5
+max-attributes=7
+max-bool-expr=5
+max-branches=12
+max-locals=15
+max-parents=7
+max-public-methods=20
+max-returns=6
+max-statements=50
+min-public-methods=2
+
+[EXCEPTIONS]
+overgeneral-exceptions=BaseException,
+                       Exception
+
 EOF
 
 # configure VIM
