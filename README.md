@@ -1,15 +1,17 @@
-# bootstrap.sh
-bootstrap on *nix system
+# bootstrap.sh #
+
+bootstrap on macOS or Ubuntu operating system
 
 ## Firefox ##
 
 ### separate search engine in private browsing mode ###
 
-1. <about:config>
+1. [about:config](about:config)
 2. set **browser.search.separatePrivateDefault** **true**
-3. <about:preferences#search>
+3. [about:preferences#search](about:preferences#search)
 
 ### addons ###
+
 - [Bitwarden](https://addons.mozilla.org/en-US/firefox/addon/bitwarden-password-manager/)
 - [Decentraleyes](https://addons.mozilla.org/en-US/firefox/addon/decentraleyes/)
 - [Google search link fix](https://addons.mozilla.org/en-US/firefox/addon/google-search-link-fix/)
