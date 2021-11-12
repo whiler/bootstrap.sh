@@ -24,10 +24,12 @@ git config --global core.excludesfile "${HOME}/.gitignore"
 git config --global core.filemode false
 git config --global diff.tool vimdiff
 git config --global difftool.prompt false
+git config --global init.defaultBranch wip
 git config --global merge.tool vimdiff
 git config --global pull.rebase false
 git config --global push.default simple
-git config --global url."git@bitbucket.org:".insteadOf "https://bitbucket.org/"
+git config --global url."git@bitbucket.org:whiler/".insteadOf "https://bitbucket.org/whiler/"
+git config --global url."https://hub.fastgit.org".insteadOf https://github.com
 
 cat > "${HOME}/.gitignore" << EOF
 *.py[co]
