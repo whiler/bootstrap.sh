@@ -63,6 +63,7 @@ func main() {
 		sigCh = make(chan os.Signal, 2)
 		defer close(sigCh)
 		signal.Notify(sigCh, syscall.SIGINT, syscall.SIGTERM)
+		defer signal.Stop(sigCh)
 		<-sigCh
 		cancel()
 		srv.Shutdown(29 * time.Second)
