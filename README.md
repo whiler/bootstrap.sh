@@ -19,7 +19,8 @@ bootstrap on macOS or Ubuntu operating system
 
 - [Bitwarden](https://addons.mozilla.org/en-US/firefox/addon/bitwarden-password-manager/)
 - [Decentraleyes](https://addons.mozilla.org/en-US/firefox/addon/decentraleyes/)
-- [Google search link fix](https://addons.mozilla.org/en-US/firefox/addon/google-search-link-fix/)
+- [Don't track me Google](https://addons.mozilla.org/en-US/firefox/addon/dont-track-me-google1/)
+- [Firefox Multi-Account Containers](https://addons.mozilla.org/en-US/firefox/addon/multi-account-containers/)
 - [Native MPEG-Dash + HLS Playback](https://addons.mozilla.org/en-US/firefox/addon/native-mpeg-dash-hls-playback/)
 - [Privacy Pass](https://addons.mozilla.org/en-US/firefox/addon/privacy-pass/)
 - [Simple Translate](https://addons.mozilla.org/en-US/firefox/addon/simple-translate/)
