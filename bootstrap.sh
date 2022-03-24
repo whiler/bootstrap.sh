@@ -31,7 +31,7 @@ git config --global push.default simple
 git config --global url."git@bitbucket.org:${USER}/".insteadOf "https://bitbucket.org/${USER}/"
 git config --global url."https://hub.fastgit.org".insteadOf https://github.com
 
-cat > "${HOME}/.gitignore" << EOF
+cat >"${HOME}/.gitignore" <<EOF
 *.py[co]
 *.sw[op]
 .DS_Store
@@ -50,16 +50,16 @@ fi
 brew doctor
 addpath=/usr/local/sbin
 # install necessary packages
-pkgs="direnv git-crypt gnupg upx wget"
+pkgs="direnv git-crypt gnupg upx wget shfmt shellcheck"
 if ! which python3; then
 	pkgs="${pkgs} python"
 else
-	addpath="${addpath}:/Users/${USER}/Library/Python/$(python3 -V|grep -o '3.[0-9]')/bin"
+	addpath="${addpath}:/Users/${USER}/Library/Python/$(python3 -V | grep -o '3.[0-9]')/bin"
 fi
 if ! which zsh; then
 	pkgs="${pkgs} zsh"
 fi
-if [[ 1 -eq $(echo "$(vim --version|grep IMproved|grep -o '8.[0-9]') < 8.2" | bc) ]]; then
+if [[ 1 -eq $(echo "$(vim --version | grep IMproved | grep -o '8.[0-9]') < 8.2" | bc) ]]; then
 	pkgs="${pkgs} vim"
 fi
 brew install ${pkgs}
@@ -67,7 +67,7 @@ brew install ${pkgs}
 # switch to zsh
 if [[ 0 -eq $(grep -c "$(which zsh)" /etc/shells) ]]; then
 	sudo sed -i "" -e '/zsh/a\'$'\n'$(which zsh) /etc/shells
-	chsh -s $(which zsh)
+	chsh -s "$(which zsh)"
 fi
 
 # install oh-my-zsh
@@ -77,14 +77,14 @@ if [[ ! -e "${HOME}/.oh-my-zsh" ]]; then
 fi
 
 if [[ 0 -eq $(grep -c "PYTHONDONTWRITEBYTECODE=x" "${HOME}/.zshrc") ]]; then
-	cat >> "${HOME}/.zshrc" << EOF
+	cat >>"${HOME}/.zshrc" <<EOF
 # don't write .py[co] files on import
 export PYTHONDONTWRITEBYTECODE=x
 EOF
 fi
 
 if [[ 0 -eq $(grep -c "direnv hook zsh" "${HOME}/.zshrc") ]]; then
-	cat >> "${HOME}/.zshrc" << EOF
+	cat >>"${HOME}/.zshrc" <<EOF
 # hook zsh 
 # Ref. https://direnv.net/docs/hook.html
 eval "\$(direnv hook zsh)"
@@ -92,17 +92,17 @@ EOF
 fi
 
 if [[ 0 -eq $(grep -c HOMEBREW_BOTTLE_DOMAIN "${HOME}/.zshrc") ]]; then
-	cat >> "${HOME}/.zshrc" << EOF
+	cat >>"${HOME}/.zshrc" <<EOF
 # https://mirrors.tuna.tsinghua.edu.cn/help/homebrew-bottles/
 export HOMEBREW_BOTTLE_DOMAIN=https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles
 EOF
 fi
 
 sed -i "" -e 's/ZSH_THEME="robbyrussell"/ZSH_THEME="gentoo"/' \
-     -e 's/# DISABLE_AUTO_UPDATE="true"/DISABLE_AUTO_UPDATE="true"/' "${HOME}/.zshrc"
+	-e 's/# DISABLE_AUTO_UPDATE="true"/DISABLE_AUTO_UPDATE="true"/' "${HOME}/.zshrc"
 
 if [[ 0 -eq $(grep -c -E "^export PATH=" "${HOME}/.zshrc") ]]; then
-	cat >> "${HOME}/.zshrc" << EOF
+	cat >>"${HOME}/.zshrc" <<EOF
 # additional PATH
 export PATH=\${PATH}:${addpath}
 EOF
@@ -110,8 +110,8 @@ fi
 
 PYPI="https://pypi.douban.com/simple/"
 PIP="${HOME}/Library/Application Support/pip/pip.conf"
-mkdir -p "$(dirname "${PIP}")" 
-cat << EOF > "${PIP}"
+mkdir -p "$(dirname "${PIP}")"
+cat <<EOF >"${PIP}"
 [global]
 index-url = ${PYPI}
 EOF
@@ -124,7 +124,7 @@ if ! which pip3; then
 fi
 
 pip3 install ipython pipdeptree pylint virtualenv
-cat << EOF > "${HOME}/.pylintrc"
+cat <<EOF >"${HOME}/.pylintrc"
 [MASTER]
 extension-pkg-allow-list=
 extension-pkg-whitelist=
@@ -312,7 +312,7 @@ overgeneral-exceptions=BaseException,
 EOF
 
 # configure VIM
-cat << EOF > "${HOME}/.vimrc"
+cat <<EOF >"${HOME}/.vimrc"
 " 不兼容模式
 set nocompatible
 
@@ -440,14 +440,14 @@ endif
 EOF
 
 mkdir -p ${HOME}/.vim/autoload ${HOME}/.vim/bundle && curl -LSso ${HOME}/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim
-pushd "${HOME}/.vim/bundle"
-    git clone https://github.com/nvie/vim-flake8.git
-    git clone https://github.com/scrooloose/nerdtree.git
-    git clone https://github.com/fatih/vim-go.git
-popd
+pushd "${HOME}/.vim/bundle" || exit
+git clone https://github.com/nvie/vim-flake8.git
+git clone https://github.com/scrooloose/nerdtree.git
+git clone https://github.com/fatih/vim-go.git
+popd || exit
 
 mkdir -p "${HOME}/.vim/template"
-cat << EOF > "${HOME}/.vim/template/py.tpl"
+cat <<EOF >"${HOME}/.vim/template/py.tpl"
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 #
@@ -464,7 +464,7 @@ EOF
 
 # SSH client
 mkdir -p "${HOME}/.ssh/sockets"
-cat << EOF > "${HOME}/.ssh/config"
+cat <<EOF >"${HOME}/.ssh/config"
 # Ref. https://infosec.mozilla.org/guidelines/openssh#modern
 
 HashKnownHosts yes
