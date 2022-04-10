@@ -441,7 +441,7 @@ EOF
 
 mkdir -p ${HOME}/.vim/autoload ${HOME}/.vim/bundle && curl -LSso ${HOME}/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim
 pushd "${HOME}/.vim/bundle" || exit
-git clone https://github.com/nvie/vim-flake8.git
+git clone https://github.com/vim-scripts/pylint-mode.git
 git clone https://github.com/scrooloose/nerdtree.git
 git clone https://github.com/fatih/vim-go.git
 popd || exit
