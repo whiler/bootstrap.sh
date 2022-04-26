@@ -1,4 +1,4 @@
-DT := $(shell date +%Y-%m-%dT%TZ%z)
+DT := $(shell date +%s)
 REV := $(shell git rev-parse --short HEAD)
 APP := $(shell basename $(CURDIR))
 ARTIFACT := bin/$(APP)$(EXT)

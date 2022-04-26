@@ -439,7 +439,7 @@ if filereadable(expand("~/.vim/autoload/pathogen.vim"))
 endif
 EOF
 
-mkdir -p ${HOME}/.vim/autoload ${HOME}/.vim/bundle && curl -LSso ${HOME}/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim
+mkdir -p "${HOME}/.vim/{autoload,bundle}" && curl -LSso "${HOME}/.vim/autoload/pathogen.vim" https://tpo.pe/pathogen.vim
 pushd "${HOME}/.vim/bundle" || exit
 git clone https://github.com/vim-scripts/pylint-mode.git
 git clone https://github.com/scrooloose/nerdtree.git
