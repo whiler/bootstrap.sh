@@ -1,12 +1,12 @@
-DT := $(shell date +%s)
+DT := $(shell date +%Y%U)
 REV := $(shell git rev-parse --short HEAD)
 APP := $(shell basename $(CURDIR))
 ARTIFACT := bin/$(APP)$(EXT)
 
 GOFLAGS ?= -race -v
-GOLDFLAGS ?= -X main.buildRevision=$(REV)@$(DT)
+GOLDFLAGS ?= -X main.buildRevision=$(DT).$(REV)
 
-.PHONY: all amd64 arm64 build init linux release
+.PHONY: all amd64 arm64 armv6 armv7 build init linux release
 
 build:
 	go build $(GOFLAGS) -ldflags "$(GOLDFLAGS)" -o $(ARTIFACT) cmd/*.go

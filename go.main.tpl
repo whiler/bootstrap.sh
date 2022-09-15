@@ -14,7 +14,11 @@ import (
 	entry "hostname.local/user/x"
 )
 
-var buildRevision string
+var (
+	normal        = "0.1.0"
+	preRelease    = "alpha"
+	buildRevision string
+)
 
 type Server interface {
 	Serve(ctx context.Context) error
@@ -33,39 +37,31 @@ func (self *flags) Set(value string) error {
 }
 
 func main() {
-	var (
-		flagSet *flag.FlagSet = flag.NewFlagSet(os.Args[0], flag.ExitOnError)
-		version bool
-
-		srv Server
-
-		ctx    context.Context
-		cancel context.CancelFunc
-		sigCh  chan os.Signal
-
-		err error
-	)
+	var flagSet = flag.NewFlagSet(os.Args[0], flag.ExitOnError)
+	var version bool
 
 	rand.Seed(time.Now().UnixNano())
-	log.SetFlags(log.LstdFlags | log.Lshortfile)
+	log.SetFlags(log.Lshortfile)
 
 	flagSet.BoolVar(&version, "version", false, "version")
 
-	if err = flagSet.Parse(os.Args[1:]); nil != err {
+	if err := flagSet.Parse(os.Args[1:]); nil != err {
 		fmt.Fprintln(os.Stderr, err)
 	} else if version {
-		fmt.Println(buildRevision)
-	} else if srv, err = entry.New(); nil != err {
+		fmt.Printf("%s-%s+%s\r\n", normal, preRelease, buildRevision)
+	} else if srv, err := entry.New(); nil != err {
 		fmt.Fprintln(os.Stderr, err)
 	} else {
-		ctx, cancel = context.WithCancel(context.Background())
-		go srv.Serve(ctx)
-		sigCh = make(chan os.Signal, 2)
-		defer close(sigCh)
-		signal.Notify(sigCh, syscall.SIGINT, syscall.SIGTERM)
-		defer signal.Stop(sigCh)
-		<-sigCh
-		cancel()
-		srv.Shutdown(29 * time.Second)
+		ctx, cancel := context.WithCancel(context.Background())
+		go func(){
+			ch := make(chan os.Signal, 2)
+			signal.Notify(ch, syscall.SIGINT, syscall.SIGTERM)
+			<-ch
+			signal.Stop(ch)
+			close(ch)
+			cancel()
+			srv.Shutdown(3 * time.Second)
+		}()
+		srv.Serve(ctx)
 	}
 }
