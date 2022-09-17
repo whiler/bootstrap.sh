@@ -6,7 +6,7 @@ ARTIFACT := bin/$(APP)$(EXT)
 GOFLAGS ?= -race -v
 GOLDFLAGS ?= -X main.buildRevision=$(DT).$(REV)
 
-.PHONY: all amd64 arm64 armv6 armv7 build init linux release
+.PHONY: all amd64 arm64 armv6 armv7 build init linux release tidy
 
 build:
 	go build $(GOFLAGS) -ldflags "$(GOLDFLAGS)" -o $(ARTIFACT) cmd/*.go
@@ -32,5 +32,8 @@ armv6:
 
 init:
 	go mod init $(shell hostname -f)/$(USER)/$(APP)
+
+tidy: go.mod
+	go mod tidy
 
 all: amd64 arm64
