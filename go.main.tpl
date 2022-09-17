@@ -16,7 +16,7 @@ import (
 
 var (
 	normal        = "0.1.0"
-	preRelease    = "alpha"
+	preRelease    = "dev"
 	buildRevision string
 )
 
