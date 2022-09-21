@@ -36,4 +36,12 @@ init:
 tidy: go.mod
 	go mod tidy
 
+updep: go.mod
+	rm -f go.sum
+	head -1 go.mod > /tmp/go.mod
+	mv /tmp/go.mod go.mod
+	go mod tidy
+
+go.mod: init
+
 all: amd64 arm64
