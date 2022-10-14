@@ -3,16 +3,17 @@ REV := $(shell git rev-parse --short HEAD)
 APP := $(shell basename $(CURDIR))
 ARTIFACT := bin/$(APP)$(EXT)
 
+TAGS ?= dev
 GOFLAGS ?= -race -v
 GOLDFLAGS ?= -X main.buildRevision=$(DT).$(REV)
 
 .PHONY: all amd64 arm64 armv6 armv7 build init linux release tidy
 
 build:
-	go build $(GOFLAGS) -ldflags "$(GOLDFLAGS)" -o $(ARTIFACT) cmd/*.go
+	go build $(GOFLAGS) -ldflags "$(GOLDFLAGS)" -tags="$(TAGS)" -o $(ARTIFACT) cmd/*.go
 
 release:
-	GOFLAGS="-trimpath" GOLDFLAGS="$(GOLDFLAGS) -s -w" $(MAKE) build
+	GOFLAGS="-trimpath" GOLDFLAGS="$(GOLDFLAGS) -s -w" TAGS="release" $(MAKE) build
 	upx $(ARTIFACT)
 
 linux:
