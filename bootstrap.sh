@@ -29,7 +29,6 @@ git config --global merge.tool vimdiff
 git config --global pull.rebase false
 git config --global push.default simple
 git config --global url."git@bitbucket.org:${USER}/".insteadOf "https://bitbucket.org/${USER}/"
-git config --global url."https://hub.fastgit.org".insteadOf https://github.com
 
 cat >"${HOME}/.gitignore" <<EOF
 *.py[co]
@@ -54,7 +53,7 @@ pkgs="direnv git-crypt gnupg upx wget shfmt shellcheck"
 if ! which python3; then
 	pkgs="${pkgs} python"
 else
-	addpath="${addpath}:/Users/${USER}/Library/Python/$(python3 -V | grep -o '3.[0-9]')/bin"
+	addpath="${addpath}:/Users/${USER}/Library/Python/$(python3 -V | grep -o '3.[0-9]\+')/bin"
 fi
 if ! which zsh; then
 	pkgs="${pkgs} zsh"
@@ -65,7 +64,7 @@ fi
 brew install ${pkgs}
 
 # switch to zsh
-if [[ 0 -eq $(grep -c "$(which zsh)" /etc/shells) ]]; then
+if ! grep -q "$(which zsh)" /etc/shells; then
 	sudo sed -i "" -e '/zsh/a\'$'\n'$(which zsh) /etc/shells
 	chsh -s "$(which zsh)"
 fi
@@ -76,14 +75,14 @@ if [[ ! -e "${HOME}/.oh-my-zsh" ]]; then
 	sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 fi
 
-if [[ 0 -eq $(grep -c "PYTHONDONTWRITEBYTECODE=x" "${HOME}/.zshrc") ]]; then
+if ! grep -q "PYTHONDONTWRITEBYTECODE=x" "${HOME}/.zshrc"; then
 	cat >>"${HOME}/.zshrc" <<EOF
 # don't write .py[co] files on import
 export PYTHONDONTWRITEBYTECODE=x
 EOF
 fi
 
-if [[ 0 -eq $(grep -c "direnv hook zsh" "${HOME}/.zshrc") ]]; then
+if ! grep -q "direnv hook zsh" "${HOME}/.zshrc"; then
 	cat >>"${HOME}/.zshrc" <<EOF
 # hook zsh 
 # Ref. https://direnv.net/docs/hook.html
@@ -91,7 +90,7 @@ eval "\$(direnv hook zsh)"
 EOF
 fi
 
-if [[ 0 -eq $(grep -c HOMEBREW_BOTTLE_DOMAIN "${HOME}/.zshrc") ]]; then
+if ! grep -q HOMEBREW_BOTTLE_DOMAIN "${HOME}/.zshrc"; then
 	cat >>"${HOME}/.zshrc" <<EOF
 # https://mirrors.tuna.tsinghua.edu.cn/help/homebrew-bottles/
 export HOMEBREW_BOTTLE_DOMAIN=https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles
@@ -101,7 +100,7 @@ fi
 sed -i "" -e 's/ZSH_THEME="robbyrussell"/ZSH_THEME="gentoo"/' \
 	-e 's/# DISABLE_AUTO_UPDATE="true"/DISABLE_AUTO_UPDATE="true"/' "${HOME}/.zshrc"
 
-if [[ 0 -eq $(grep -c -E "^export PATH=" "${HOME}/.zshrc") ]]; then
+if ! grep -q -E "^export PATH=" "${HOME}/.zshrc"; then
 	cat >>"${HOME}/.zshrc" <<EOF
 # additional PATH
 export PATH=\${PATH}:${addpath}
@@ -123,7 +122,7 @@ if ! which pip3; then
 	sudo python3 get-pip.py -i "${PYPI}"
 fi
 
-pip3 install ipython pipdeptree pylint virtualenv
+pip3 install ipython pipdeptree pylint
 cat <<EOF >"${HOME}/.pylintrc"
 [MASTER]
 extension-pkg-allow-list=
@@ -439,6 +438,8 @@ if filereadable(expand("~/.vim/autoload/pathogen.vim"))
 endif
 EOF
 
+# vim-pathogen
+# Ref. https://github.com/tpope/vim-pathogen
 mkdir -p "${HOME}/.vim/{autoload,bundle}" && curl -LSso "${HOME}/.vim/autoload/pathogen.vim" https://tpo.pe/pathogen.vim
 pushd "${HOME}/.vim/bundle" || exit
 git clone https://github.com/vim-scripts/pylint-mode.git
