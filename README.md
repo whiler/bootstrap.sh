@@ -1,6 +1,6 @@
 # bootstrap.sh #
 
-bootstrap on macOS or Ubuntu operating system
+bootstrap on macOS
 
 ## Firefox ##
 
@@ -9,11 +9,6 @@ bootstrap on macOS or Ubuntu operating system
 1. [about:config](about:config)
 2. set **browser.search.separatePrivateDefault** **true**
 3. [about:preferences#search](about:preferences#search)
-
-### disable DNS cache ###
-
-1. [about:config](about:config)
-2. set **network.dnsCacheEntries** , **network.dnsCacheExpiration** and **network.dnsCacheExpirationGracePeriod** to be **0**
 
 ### addons ###
 
