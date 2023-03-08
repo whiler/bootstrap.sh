@@ -426,6 +426,22 @@ if has("autocmd")
     " F5 调试脚本
     autocmd FileType python map <F5> :!python3 %<CR>
     autocmd FileType lua map <F5> :!lua %<CR>
+
+    " html 展开 tab
+    autocmd FileType html set tabstop=2 expandtab shiftwidth=2 softtabstop=2
+    autocmd FileType html set ruler
+
+	" Django html 模版展开 tab
+    autocmd FileType htmldjango set tabstop=2 expandtab shiftwidth=2 softtabstop=2
+    autocmd FileType htmldjango set ruler
+
+    " css 展开 tab
+    autocmd FileType css set tabstop=2 expandtab shiftwidth=2 softtabstop=2
+    autocmd FileType css set ruler
+
+    " javascript 展开 tab
+    autocmd FileType javascript set tabstop=2 expandtab shiftwidth=2 softtabstop=2
+    autocmd FileType javascript set ruler
 endif
 
 if filereadable(expand("~/.vim/autoload/pathogen.vim"))
