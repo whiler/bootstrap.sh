@@ -47,27 +47,8 @@ if [[ ! -e /usr/local/bin/brew ]]; then
 	/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 fi
 brew doctor
-addpath=/usr/local/sbin
 # install necessary packages
-pkgs="direnv git-crypt gnupg upx wget shfmt shellcheck"
-if ! which python3; then
-	pkgs="${pkgs} python"
-else
-	addpath="${addpath}:/Users/${USER}/Library/Python/$(python3 -V | grep -o '3.[0-9]\+')/bin"
-fi
-if ! which zsh; then
-	pkgs="${pkgs} zsh"
-fi
-if [[ 1 -eq $(echo "$(vim --version | grep IMproved | grep -o '8.[0-9]') < 8.2" | bc) ]]; then
-	pkgs="${pkgs} vim"
-fi
-brew install ${pkgs}
-
-# switch to zsh
-if ! grep -q "$(which zsh)" /etc/shells; then
-	sudo sed -i "" -e '/zsh/a\'$'\n'$(which zsh) /etc/shells
-	chsh -s "$(which zsh)"
-fi
+brew install direnv git-crypt gnupg upx wget shfmt shellcheck
 
 # install oh-my-zsh
 # Ref. https://github.com/robbyrussell/oh-my-zsh
@@ -97,13 +78,13 @@ export HOMEBREW_BOTTLE_DOMAIN=https://mirrors.tuna.tsinghua.edu.cn/homebrew-bott
 EOF
 fi
 
-sed -i "" -e 's/ZSH_THEME="robbyrussell"/ZSH_THEME="gentoo"/' \
-	-e 's/# DISABLE_AUTO_UPDATE="true"/DISABLE_AUTO_UPDATE="true"/' "${HOME}/.zshrc"
+sed -i "" -e 's/ZSH_THEME="robbyrussell"/ZSH_THEME="gentoo"/' "${HOME}/.zshrc"
 
 if ! grep -q -E "^export PATH=" "${HOME}/.zshrc"; then
+	addpath="/usr/local/sbin:/Users/${USER}/Library/Python/$(python3 -V | grep -o '3.[0-9]\+')/bin"
 	cat >>"${HOME}/.zshrc" <<EOF
 # additional PATH
-export PATH=\${PATH}:${addpath}
+export PATH=${addpath}:\${PATH}
 EOF
 fi
 
@@ -114,13 +95,6 @@ cat <<EOF >"${PIP}"
 [global]
 index-url = ${PYPI}
 EOF
-
-# install python packages
-# https://pip.readthedocs.io/en/stable/user_guide/#configuration
-if ! which pip3; then
-	curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
-	sudo python3 get-pip.py -i "${PYPI}"
-fi
 
 pip3 install ipython pipdeptree pylint
 cat <<EOF >"${HOME}/.pylintrc"
@@ -431,7 +405,7 @@ if has("autocmd")
     autocmd FileType html set tabstop=2 expandtab shiftwidth=2 softtabstop=2
     autocmd FileType html set ruler
 
-	" Django html 模版展开 tab
+    " Django html 模版展开 tab
     autocmd FileType htmldjango set tabstop=2 expandtab shiftwidth=2 softtabstop=2
     autocmd FileType htmldjango set ruler
 
@@ -456,7 +430,7 @@ EOF
 
 # vim-pathogen
 # Ref. https://github.com/tpope/vim-pathogen
-mkdir -p "${HOME}/.vim/{autoload,bundle}" && curl -LSso "${HOME}/.vim/autoload/pathogen.vim" https://tpo.pe/pathogen.vim
+mkdir -p "${HOME}"/.vim/{autoload,bundle} && curl -LSso "${HOME}/.vim/autoload/pathogen.vim" https://tpo.pe/pathogen.vim
 pushd "${HOME}/.vim/bundle" || exit
 git clone https://github.com/vim-scripts/pylint-mode.git
 git clone https://github.com/scrooloose/nerdtree.git
