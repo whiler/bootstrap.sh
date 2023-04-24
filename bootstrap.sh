@@ -182,7 +182,7 @@ allowed-redefined-builtins=
 callbacks=cb_,
           _cb
 dummy-variables-rgx=_+$|(_
-[a-zA-Z0-9_]*[a-zA-Z0-9]+?$)|dummy|^ignored_|^unused_
+                    [a-zA-Z0-9_]*[a-zA-Z0-9]+?$)|dummy|^ignored_|^unused_
 ignored-argument-names=_.*|^ignored_|^unused_
 init-import=no
 redefining-builtins-modules=six.moves,past.builtins,future.builtins,builtins,io
@@ -408,6 +408,10 @@ if has("autocmd")
     " Django html 模版展开 tab
     autocmd FileType htmldjango set tabstop=2 expandtab shiftwidth=2 softtabstop=2
     autocmd FileType htmldjango set ruler
+
+    " smarty 模版展开 tab
+    autocmd FileType smarty set tabstop=2 expandtab shiftwidth=2 softtabstop=2
+    autocmd FileType smarty set ruler
 
     " css 展开 tab
     autocmd FileType css set tabstop=2 expandtab shiftwidth=2 softtabstop=2
