@@ -10,7 +10,9 @@ gitupdate() {
 
 brew leaves
 brew update
+#export ALL_PROXY=socks5h://127.0.0.1:1080
 brew upgrade
+#unset ALL_PROXY
 brew cleanup -s
 brew autoremove
 brew doctor
